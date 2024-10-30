@@ -1,0 +1,76 @@
+name: UCI
+
+model:
+  class_path: models.mlp_model.MLPModel
+  init_args:
+    data_dim: 13
+    hidden_dim: 64
+    latent_dim: 64
+    f_add_blocks: 0
+    h_add_blocks: 0
+    g_add_blocks: 0
+    in_proj: mlp
+    out_proj: linear
+
+    method: ours
+    force_zero_prob: 0.1
+    metric_type: rmse
+    label_scaler: true
+    scheduler: 'none'
+    
+    lr: 0.003
+    wd: 0.0
+    task_criterion: ce
+    dynamics: linear
+    adjoint: false
+    label_ae_noise: 3.0
+
+
+trainer:
+  check_val_every_n_epoch: null
+  max_steps: 10000
+  log_every_n_steps: 10
+  max_steps: 500000
+  log_every_n_steps: 1
+  gradient_clip_val: 0
+  logger:
+    class_path: lightning.pytorch.loggers.WandbLogger
+    init_args:
+      project: SFNO_exp
+      log_model: false
+      save_dir: ./logs
+    
+  callbacks:
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
+      init_args:
+        logging_interval: step
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint # log best
+      init_args: 
+        save_last: true
+        monitor: 'val/rmse_dopri'
+        save_top_k: 1
+        mode: min
+        mode: max
+        dirpath: null
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint # log every 24 hours
+      init_args:
+        save_top_k: -1
+        dirpath: null
+        train_time_interval: '24:0:0'
+    - class_path: lightning.pytorch.callbacks.EarlyStopping
+      init_args:
+        patience: 100
+        monitor: 'val/rmse_dopri'
+        mode: min
+
+
+data:
+  dataset: uci
+  batch_size: 64
+  test_batch_size: 64
+  val_perc: 0.001
+  task_type: regression
+  task: bostonHousing
+  split_num: 0
+
+seed_everything: 0

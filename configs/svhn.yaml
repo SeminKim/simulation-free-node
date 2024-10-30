@@ -1,0 +1,69 @@
+name: SVHN 
+
+model:
+  class_path: models.conv_model.ConvModel
+  init_args:
+    data_dim: 3
+    emb_res:
+    - 7
+    - 7
+    latent_dim: 256 
+    hidden_dim: 256
+    in_latent_dim: 64 
+    h_add_blocks: 4
+    f_add_blocks: 4
+    g_add_blocks: 0
+    num_classes: 10
+
+    method: ours
+    force_zero_prob: 0.1
+    metric_type: accuracy
+    label_scaler: null
+
+    scheduler: cos
+    lr: 3e-4
+    wd: 0.0
+    task_criterion: ce
+    dynamics: linear
+    adjoint: false
+    label_ae_noise: 7.0
+
+trainer:
+  val_check_interval: 1960
+  check_val_every_n_epoch: null
+  max_steps: 100000
+  log_every_n_steps: 1
+  gradient_clip_val: 0
+  logger:
+    class_path: lightning.pytorch.loggers.WandbLogger
+    init_args:
+      project: SFNO_exp
+      log_model: false
+      save_dir: ./logs
+  callbacks:
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
+      init_args:
+        logging_interval: step
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint # log best
+      init_args: 
+        save_last: true
+        monitor: 'val/accuracy_dopri'
+        save_top_k: 1
+        mode: max
+        dirpath: null
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint # log every 24 hours
+      init_args:
+        save_top_k: -1
+        dirpath: null
+        train_time_interval: '24:0:0'
+    - class_path: lightning.pytorch.callbacks.RichModelSummary
+      init_args:
+        max_depth: 10
+data:
+  dataset: svhn
+  batch_size: 1024
+  test_batch_size: 768
+  task_type: classification
+
+
+seed_everything: 0

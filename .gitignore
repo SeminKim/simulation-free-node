@@ -1,0 +1,12 @@
+__pycache__
+*.pyc
+.data
+.vscode
+
+logs
+lightning_logs
+ckpts
+wandb
+
+
+UCI_Datasets

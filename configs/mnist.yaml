@@ -1,0 +1,60 @@
+name: MNIST
+
+model:
+  class_path: models.mlp_model.MLPModel
+  init_args:
+    data_dim: 784
+    hidden_dim: 2048
+    f_add_blocks: 1
+    h_add_blocks: 0
+    g_add_blocks: 0
+    in_proj: mlp
+    out_proj: mlp
+    proj_norm: bn
+    output_dim: 10
+
+    method: ours
+    force_zero_prob: 0.1
+    metric_type: accuracy
+    label_scaler: none
+
+    scheduler: none
+    lr: 1e-4
+    wd: 0.0
+    task_criterion: ce
+    dynamics: linear
+    adjoint: false
+    label_ae_noise: 3.0
+    total_steps: 100000
+
+
+trainer:
+  check_val_every_n_epoch: null
+  max_steps: 500000
+  log_every_n_steps: 1
+  gradient_clip_val: 0
+  logger:
+    class_path: lightning.pytorch.loggers.WandbLogger
+    init_args:
+      project: SFNO_exp
+      log_model: false
+      save_dir: ./logs
+  callbacks:
+    - class_path: lightning.pytorch.callbacks.LearningRateMonitor
+      init_args:
+        logging_interval: step
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+      init_args: 
+        monitor: 'val/accuracy_dopri'
+        save_top_k: 1
+        mode: max
+        dirpath: null
+        train_time_interval: null 
+
+data:
+  dataset: mnist
+  batch_size: 1024
+  test_batch_size: 768
+  task_type: classification
+ 
+seed_everything: 0
