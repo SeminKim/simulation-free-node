@@ -3,7 +3,7 @@ This repository contains the official implementation of the paper **"Simulation-
 
 Semin Kim*, Jaehoon Yoo*, Jinwoo Kim, Yeonwoo Cha, Saehoon Kim, Seunghoon Hong
 
-[Paper Link (TODO)](TODO)
+[Paper Link](https://arxiv.org/abs/2410.22918)
 
 ## Setup
 To set up the environment, start by installing dependencies listed in `requirements.txt`. You can also use Docker to streamline the setup process.
@@ -64,9 +64,9 @@ Trained checkpoints can be found at release tab of this repository.
 
 |Dataset    |Dopri Acc. |Link       |
 |:---:      |:---:      |:---:      |
-|MNIST      |99.30%     |[TODO]()|
-|SVHN       |96.12%     |[TODO]()|
-|CIFAR10    |88.89%     |[TODO]()|
+|MNIST      |99.30%     |[Download](https://github.com/SeminKim/simulation-free-node/releases/download/v1.0/mnist.ckpt)|
+|SVHN       |96.12%     |[Download](https://github.com/SeminKim/simulation-free-node/releases/download/v1.0/svhn.ckpt)|
+|CIFAR10    |88.89%     |[Download](https://github.com/SeminKim/simulation-free-node/releases/download/v1.0/cifar10.ckpt)|
 
 
 ## Additional Notes
@@ -98,5 +98,16 @@ This implementation of this code was based on the following repositories: [Neura
 
 ## Citation
 ```
-(TODO)
+@article{kim2024simfreenode,
+         title={Simulation-Free Training of Neural ODEs on Paired Data}, 
+         author={Semin Kim and
+                 Jaehoon Yoo and
+                 Jinwoo Kim and
+                 Yeonwoo Cha and
+                 Saehoon Kim and
+                 Seunghoon Hong},
+         journal={arXiv preprint arXiv:2410.22918},
+         year={2024},
+         url={https://arxiv.org/abs/2410.22918}, 
+}
 ```
